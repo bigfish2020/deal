@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team1.deal.mapper.QuotedPriceInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="team1.deal.model.po.QuotedPriceInfoPO">
+        <id column="id" property="id" />
+        <result column="dId" property="dId" />
+        <result column="uId" property="uId" />
+        <result column="status" property="status" />
+        <result column="supplyQuantity" property="supplyQuantity" />
+        <result column="calorificValue" property="calorificValue" />
+        <result column="rawCoalPrice" property="rawCoalPrice" />
+        <result column="sulfurContent" property="sulfurContent" />
+        <result column="producingArea" property="producingArea" />
+        <result column="itemPrice" property="itemPrice" />
+        <result column="volatileQuantity" property="volatileQuantity" />
+        <result column="port" property="port" />
+        <result column="aad" property="aad" />
+        <result column="totalMoisture" property="totalMoisture" />
+    </resultMap>
+
+</mapper>

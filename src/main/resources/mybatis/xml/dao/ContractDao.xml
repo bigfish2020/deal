@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team1.deal.dao.ContractDao">
+    <select id="getContractBrief" resultType="team1.deal.model.vo.ContractBriefVO">
+        select c.transactionContractNumber,u.name ,c.signDate,c.price,c.amount,c.status from contract as c
+        INNER JOIN quoted_price_info as q on c.qId = q.id
+        INNER JOIN user as u on u.id = q.uId
+         where c.status = 0
+    </select>
+    <select id="getContractVO" resultType="team1.deal.model.vo.ContractVO">
+        select c.transactionContractNumber,u.name,d.deliveryTime,d.coalType,d.coalNumber,d.transportType,d.deliveryPlace,c.signDate,c.price,c.amount,c.status,c.url from contract as c
+        INNER JOIN quoted_price_info as q on c.qId = q.id
+        INNER JOIN user as u on u.id = q.uId
+        INNER JOIN demand_order as d on c.dId =d.id
+         where c.transactionContractNumber = #{contractId}
+    </select>
+</mapper>

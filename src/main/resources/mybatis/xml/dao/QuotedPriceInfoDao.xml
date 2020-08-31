@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team1.deal.dao.QuotedPriceInfoDao">
+    <select id="getDemandOrder" resultType="team1.deal.model.po.DemandOrderPO">
+        select d.* from demand_order AS d INNER JOIN quoted_price_info AS q ON  q.dId = d.id where q.id=#{id}
+    </select>
+    <select id="getQuotedPriceBriefInfo" resultType="team1.deal.model.vo.QuotedPriceBriefInfoVO">
+        select q.id,q.dId,d.coalType,d.coalNumber,u.name,q.status,q.supplyQuantity from demand_order AS d
+        INNER JOIN quoted_price_info AS q ON  q.did = d.id
+        INNER JOIN user AS u ON u.id = q.uId
+        <where>
+            <if test="id!=null">
+                u.id = #{id}
+            </if>
+            <if test="status!=null">
+                q.status = #{status}
+            </if>
+        </where>
+    </select>
+    <select id="getDeliveryPlace" resultType="team1.deal.model.po.CityPO">
+        select distinct c.* from city AS c INNER JOIN quoted_price_info AS q where q.port = c.cityName
+    </select>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team1.deal.mapper.DemandOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="team1.deal.model.po.DemandOrderPO">
+        <id column="id" property="id" />
+        <result column="uId" property="uId" />
+        <result column="status" property="status" />
+        <result column="idea" property="idea" />
+        <result column="lastTime" property="lastTime" />
+        <result column="applyUnit" property="applyUnit" />
+        <result column="applyTime" property="applyTime" />
+        <result column="deliveryTime" property="deliveryTime" />
+        <result column="coalType" property="coalType" />
+        <result column="coalNumber" property="coalNumber" />
+        <result column="transportType" property="transportType" />
+        <result column="deliveryPlace" property="deliveryPlace" />
+        <result column="paymentType" property="paymentType" />
+        <result column="checkType" property="checkType" />
+        <result column="maxPrice" property="maxPrice" />
+        <result column="minPrice" property="minPrice" />
+        <result column="priceDescription" property="priceDescription" />
+        <result column="offerMargin" property="offerMargin" />
+        <result column="performMargin" property="performMargin" />
+        <result column="calorificValue" property="calorificValue" />
+        <result column="sulfurContent" property="sulfurContent" />
+        <result column="volatileQuantity" property="volatileQuantity" />
+        <result column="aad" property="aad" />
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/deal?serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  application:
+    name: deal
+  redis:
+    host: 127.0.0.1
+    password: 123456
+  cache:
+    type: redis
+    redis:
+      cache-null-values: false
+mybatis-plus:
+  mapper-locations: classpath:/mybatis/xml/*/*.xml
+logging:
+  level:
+    team1.deal.mapper.*: debug
+    team1.deal.dao: debug

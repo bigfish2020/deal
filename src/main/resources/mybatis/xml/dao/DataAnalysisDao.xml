@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team1.deal.dao.DataAnalysisDao">
+    <select id="countSunUserNumber" resultType="long">
+        select count(*) from user
+        INNER JOIN user_role
+        ON user.id = user_role.uid
+        where user_role.rId=4
+    </select>
+
+    <!-- 需求订单数量统计long countDemandNumber(); -->
+    <select id="countDemandNumber" resultType="long">
+        select count(*) from demand_order where status = 4
+    </select>
+
+    <!-- 采购数量总量统计public long CountDemandProcurement(); -->
+    <select id="countDemandProcurement" resultType="long">
+        select sum(coalNumber) from demand_order where status = 4
+    </select>
+
+    <!-- 近十天交易额占比public BigDecimal proportion(); -->
+    <select id="proportion" resultType="BigDecimal">
+        select table2.RecentlytotallPrice/table2.totallPrice from (
+        select sum(q.rawCoalPrice * q.supplyQuantity) as RecentlytotallPrice,(select sum(q.rawCoalPrice * q.supplyQuantity) as totallPrice
+        from quoted_price_info as q inner join demand_order as d on q.did = d.id
+        where q.status = 3
+        group by q.status) as totallPrice
+        from quoted_price_info as q inner join demand_order as d on q.did = d.id
+        where q.status = 3 and d.deliveryTime between '2020-09-15 00:00:00' and '2020-09-25 00:00:00'
+        group by q.status
+        ) as table2
+    </select>
+
+    <!-- public long countQuotedPriceNumber(); -->
+    <select id="countQuotedPriceNumber" resultType="long">
+        select count(*) from quoted_price_info where status = 3
+    </select>
+
+    <!-- 折线图public List<CoalYearNameGdpVO> KindsOfCoal(); -->
+    <select id="kindsOfCoal" resultType="team1.deal.model.vo.CoalYearNameGdpVO">
+        SELECT
+	demand_order.coalType,
+	sum( demand_order.coalNumber ) AS gdp,
+	DATE_FORMAT( demand_order.deliveryTime, "%Y" ) AS `year`
+FROM
+	demand_order
+GROUP BY
+	demand_order.coalType,
+	DATE_FORMAT(
+		demand_order.deliveryTime,
+	"%Y"
+	) order by year
+    </select>
+
+    <!-- public List<String> kindsOfCoallist(LocalDateTime beginYear,LocalDateTime endYear); -->
+    <select id="kindsOfCoallist" resultType="String">
+        select coalType from demand_order where deliveryTime <![CDATA[>=]]> #{beginYear}
+        and deliveryTime <![CDATA[<]]> #{endYear} group by coalType
+    </select>
+
+    <!-- public long existOrNotExist(String coalType); -->
+    <select id="existOrNotExist" resultType="long">
+        select count(*) from demand_order where coalType = #{coalType}
+    </select>
+
+    <!-- 运输方式统计public List<TransportInformationVO> modeOfTransportStatistics(); -->
+    <select id="modeOfTransportStatistics" resultType="team1.deal.model.vo.TransportInformationVO">
+        SELECT
+        demand_order.transportType,
+        count(*) as count
+        FROM
+        demand_order
+        GROUP BY
+        demand_order.transportType
+    </select>
+
+    <!--  地区煤炭分布统计
+    public List<CoalInformationVO> CoalDistribution(); -->
+    <select id="CoalDistribution" resultType="team1.deal.model.vo.CoalInformationVO">
+        select coalType,producingArea,sum(supplyQuantity) as count from (select d.coalType,q.producingArea,q.supplyQuantity
+        from quoted_price_info as q inner join demand_order as d on q.did = d.id
+        where q.producingArea = '沿海城市' or q.producingArea = '内陆城市'
+        group by q.producingArea,q.id) as table1 group by producingArea,coalType
+    </select>
+
+    <!-- 雷达图public List<RadarMapVO> attention(); -->
+    <select id="attention" resultType="team1.deal.model.vo.RadarMapVO">
+        select coalType,producingArea,sum(supplyQuantity) as count from (select d.coalType,q.producingArea,q.supplyQuantity
+from quoted_price_info as q inner join demand_order as d on q.did = d.id
+where q.producingArea = '沿海城市' or q.producingArea = '内陆城市'
+group by q.producingArea,q.id) as table1 group by producingArea,coalType
+    </select>
+
+    <!-- public List<DispatchDestinationDTO> getDispatchDestinationDTO(Integer did); -->
+    <select id="getDispatchDestinationDTO" resultType="team1.deal.model.dto.DispatchDestinationDTO">
+        select d.deliveryPlace,q.`port` from demand_order as d INNER JOIN (select q.dId,q.`port` from quoted_price_info as q) as q on d.id =q.dId GROUP BY d.deliveryPlace,q.`port`
+    </select>
+
+    <select id="increaseOfDemand" resultType="long">
+        select count(*) from demand_order
+        where applyTime <![CDATA[   <=  ]]> #{sunday} and applyTime <![CDATA[   >=  ]]> #{monday}
+    </select>
+
+    <select id="increaseOfDemandProcurement" resultType="long">
+        select sum(coalNumber) from demand_order
+        where applyTime <![CDATA[   <=  ]]> #{sunday} and applyTime <![CDATA[   >=  ]]> #{monday}
+    </select>
+
+    <select id="selectRecentTime" resultType="java.time.LocalDateTime">
+        select u.createTime from user AS u
+        INNER JOIN user_role AS ur ON u.id = ur.uId
+        INNER JOIN role AS r ON ur.rId = r.id
+        where r.roleName = "阳光用户" order by createTime desc limit 1
+    </select>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team1.deal.dao.UserDao">
+    <select id="getUserDept" resultType="team1.deal.model.po.DeptPO">
+        select * from user
+        INNER JOIN dept_user ON user.id = dept_user.uId
+        INNER JOIN dept ON dept_user.dId = dept.id
+        where user.id = #{id}
+    </select>
+    <select id="getUserAuthority" resultType="team1.deal.model.po.AuthorityPO">
+        select * from user
+        INNER JOIN user_role ON user.id = user_role.uId
+        INNER JOIN role ON user_role.rId = role.id
+        INNER JOIN role_authority ON role.id = role_authority.rId
+        INNER JOIN authority ON role_authority.aId = authority.id
+        where user.id = #{id}
+    </select>
+</mapper>

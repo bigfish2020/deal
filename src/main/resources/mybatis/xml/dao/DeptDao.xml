@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team1.deal.dao.DeptDao">
+    <select id="getDeptByUserId" resultType="team1.deal.model.po.DeptPO">
+        select d.* from user AS u
+        INNER JOIN dept_user AS de ON  u.id = de.did
+        INNER JOIN dept AS d ON d.id = de.did
+        where u.id = #{id}
+    </select>
+</mapper>
